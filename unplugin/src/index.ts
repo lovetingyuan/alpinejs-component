@@ -19,44 +19,6 @@ const defaultMinifyOptions = {
   removeStyleLinkTypeAttributes: true,
 }
 
-// function getTailwindCss(file: string, minify: boolean): Promise<string> {
-//   const tailwind = require('tailwindcss')
-//   try {
-//     // disable tailwindcss warning:
-//     // warn - No utility classes were detected in your source files.
-//     const warn = console.warn
-//     console.warn = () => {
-//       /** noop */
-//     }
-//     const log = require('tailwindcss/lib/util/log')
-//     log.warn('content-problems', [''])
-//     console.warn = warn
-//   } catch (e) {
-//     /** noop */
-//   }
-//   const postcss = require('postcss')
-//   const processor = postcss(
-//     [
-//       tailwind({
-//         content: [relative(process.cwd(), file)],
-//       }),
-//       minify
-//         ? require('cssnano')({
-//             preset: 'default',
-//           })
-//         : null,
-//     ].filter(Boolean)
-//   )
-//   return processor
-//     .process(`@tailwind components; @tailwind utilities;`, {
-//       from: file,
-//       to: undefined,
-//     })
-//     .then((result: any) => {
-//       return result.css as string
-//     })
-// }
-
 async function compileTemplate(
   this: UnpluginContext,
   htmlstr: string,
@@ -76,7 +38,6 @@ async function compileTemplate(
   const body = html.childNodes.find((v: any) => v.tagName === 'body')
   const fragments = []
   let script: any = null
-  // let root: any = null
   for (const node of body.childNodes) {
     if (node.nodeName === 'script') {
       if (script === null) {
@@ -86,19 +47,6 @@ async function compileTemplate(
       }
     } else if (!node.nodeName.startsWith('#') && node.tagName) {
       fragments.push(node)
-      // if (!root) {
-      //   if (node.attrs.find((a: any) => a.name === 'x-data')) {
-      //     this.error(
-      //       `component "${name}" root element <${node.tagName}> can not have attribute "x-data".`
-      //     )
-      //   }
-      //   root = node
-      //   fragments.push(node)
-      // } else {
-      //   this.error(
-      //     `component "${name}" must and can contain only one root element(except <style>, <script> and <link>).`
-      //   )
-      // }
     }
   }
   let template = fragments
@@ -121,7 +69,6 @@ async function compileTemplate(
 interface Options {
   fileExt: `.${string}`
   minify?: boolean
-  // enableTailwindcss?: boolean
 }
 
 export const unplugin = createUnplugin((options?: Options) => {
@@ -152,12 +99,8 @@ export const unplugin = createUnplugin((options?: Options) => {
       } else {
         const { template, code } = await compileTemplate.call(this, source, name, minify)
         parseCodeCache[file] = code
-        // let tailwindcss = ''
-        // if (options?.enableTailwindcss) {
-        //   tailwindcss = await getTailwindCss(file, minify)
-        // }
         return `
-import { defineComponent } from 'unplugin-alpinejs-webcomponent/defineComponent'
+import { defineComponent } from 'unplugin-alpinejs-component/defineComponent'
 ${code ? `import * as Comp from "./${basename(file)}?jscode"\nconst comp=Comp` : ''}
 
 export default defineComponent("${name}", {

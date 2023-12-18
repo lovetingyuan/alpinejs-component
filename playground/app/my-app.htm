@@ -1,17 +1,41 @@
 <div>
-  <app-header></app-header>
-  <div x-data="{show: true}">
-    <button @click="show=!show">show counter</button>
-    <template x-if="show">
-      <add-counter init="1" step="2"></add-counter>
-    </template>
-  </div>
+  <app-header> </app-header>
   <hr />
-  <my-todo-list></my-todo-list>
+
+  <button @click="setActiveTab(activeTab === 'todo-list' ? 'counter' : 'todo-list')">change</button>
+  <button @click="show = !show">show</button>
+  <!-- <my-tabs :tabs="tabs" :active-tab="activeTab" @change="setActiveTab($event.detail.id)"></my-tabs> -->
+  <template x-if="show">
+    <div>
+      <my-tabs> </my-tabs>
+      <!-- <template x-if="activeTab === 'counter'">
+        <add-counter :init-num="13"></add-counter>
+      </template>
+      <template x-if="activeTab === 'todo-list'">
+        <my-todo-list></my-todo-list>
+      </template> -->
+    </div>
+  </template>
 </div>
 
 <script>
+  import './tabs/my-tabs.htm'
   import './app-header.htm'
   import './counter/add-counter.htm'
   import './todo-list/my-todo-list.htm'
+
+  export default function () {
+    return {
+      foo: 'fffff',
+      show: true,
+      tabs: [
+        { key: 'counter', title: 'counter' },
+        { key: 'todo-list', title: 'todo list' },
+      ],
+      activeTab: 'counter',
+      setActiveTab(tab) {
+        this.activeTab = tab
+      },
+    }
+  }
 </script>

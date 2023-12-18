@@ -6,6 +6,7 @@
   "scripts": {
     "test": "run-p -l build:**",
     "lint": "npx oxlint@latest",
+    "build": "npm run build --workspace unplugin-alpinejs-component",
     "vite": "npm run dev --workspace vite-play",
     "webpack": "npm run dev --workspace webpack-play",
     "rspack": "npm run dev --workspace rspack-play",

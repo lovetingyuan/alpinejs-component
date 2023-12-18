@@ -1,6 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { webpackPlugin: AlpineWebComponentPlugin } = require('unplugin-alpinejs-webcomponent')
+const { webpackPlugin: AlpineWebComponentPlugin } = require('unplugin-alpinejs-component')
 
 const DEV = process.argv[2] === 'serve'
 
@@ -35,6 +35,25 @@ module.exports = {
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
+      },
+      {
+        test: /\.css$/i,
+        include: require.resolve('app'),
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: {
+                  tailwindcss: {},
+                  autoprefixer: {},
+                },
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.ts$/,

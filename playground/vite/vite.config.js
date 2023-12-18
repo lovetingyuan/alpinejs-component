@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import { vitePlugin, rollupPlugin } from 'unplugin-alpinejs-webcomponent'
+import { vitePlugin, rollupPlugin } from 'unplugin-alpinejs-component'
 import { resolve } from 'path'
 
 const lib = process.argv.includes('lib')

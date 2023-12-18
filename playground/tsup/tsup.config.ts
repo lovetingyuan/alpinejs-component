@@ -1,5 +1,5 @@
 import { defineConfig } from 'tsup'
-import { esbuildPlugin as AlpineWebComponentPlugin } from 'unplugin-alpinejs-webcomponent'
+import { esbuildPlugin as AlpineWebComponentPlugin } from 'unplugin-alpinejs-component'
 
 export default defineConfig({
   entry: ['./index.ts'],

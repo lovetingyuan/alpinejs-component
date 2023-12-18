@@ -2,19 +2,19 @@
   <span class="font-bold">Counter:</span>
   <span x-text="count" class="text-xl"></span>
   <button @click="add()">Increment</button>
-  <button @click="count = 0">reset</button>
+  <button @click="count = $props.initNum">reset</button>
 </p>
 
 <script>
   import Alpine from 'alpinejs'
   export const $props = {
-    init: 0,
+    initNum: 0,
     step: 1,
   }
-  export default props => {
-    console.log('add')
+  export default function () {
+    const { initNum } = this.$props
     return {
-      count: 1,
+      count: initNum,
       add() {
         this.count++
       },
