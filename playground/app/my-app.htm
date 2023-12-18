@@ -1,0 +1,17 @@
+<div>
+  <app-header></app-header>
+  <div x-data="{show: true}">
+    <button @click="show=!show">show counter</button>
+    <template x-if="show">
+      <add-counter init="1" step="2"></add-counter>
+    </template>
+  </div>
+  <hr />
+  <my-todo-list></my-todo-list>
+</div>
+
+<script>
+  import './app-header.htm'
+  import './counter/add-counter.htm'
+  import './todo-list/my-todo-list.htm'
+</script>

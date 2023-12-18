@@ -1,0 +1,33 @@
+<input
+  type="text"
+  class="px-3 py-1 text-base"
+  placeholder="input event"
+  @keyup.enter="addEvent"
+  x-model="userInput"
+/>
+<button class="mx-3 capitalize" @click="addEvent">add</button>
+<select class="px-3 py-2 text-base" name="status" x-model="$todoList.status">
+  <option value="all">all</option>
+  <option value="todo">todo</option>
+  <option value="doing">doing</option>
+  <option value="done">done</option>
+</select>
+
+<script>
+  import $todoList from './todo-list.store'
+  export const $props = {
+    title: 'todo list',
+  }
+  export default () => ({
+    $todoList,
+    userInput: '',
+
+    addEvent() {
+      if (!this.userInput) {
+        return
+      }
+      $todoList.add(this.userInput)
+      this.userInput = ''
+    },
+  })
+</script>

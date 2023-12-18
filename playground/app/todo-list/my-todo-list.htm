@@ -1,0 +1,21 @@
+<div class="p-5">
+  <h3 class="capitalize">todo list (<span x-text="count"></span>):</h3>
+  <todo-input></todo-input>
+  <hr />
+  <todo-list></todo-list>
+</div>
+
+<script>
+  import './todo-input.htm'
+  import './todo-list.htm'
+  import $todoList from './todo-list.store'
+
+  export default function () {
+    console.log(33, this)
+    return {
+      get count() {
+        return $todoList.list.length
+      },
+    }
+  }
+</script>
