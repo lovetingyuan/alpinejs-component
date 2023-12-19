@@ -1,0 +1,26 @@
+<div class="border border-solid p-2 rounded">
+  <span class="font-bold">Counter:</span>
+  <span x-text="count" class="text-xl"></span>
+  <button @click="add()">Increment + <span x-text="step"></span></button>
+  <button @click="count = $props.initNum">reset</button>
+  <span>step</span>
+  <input type="number" class="w-10" x-model.number="step" />
+  <p x-text="$props.initNum"></p>
+</div>
+
+<script>
+  import Alpine from 'alpinejs'
+
+  export const $props = {
+    initNum: 6,
+  }
+  export default props => {
+    return {
+      count: props.initNum || 1,
+      add() {
+        this.count += this.step
+      },
+      step: 1,
+    }
+  }
+</script>

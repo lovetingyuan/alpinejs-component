@@ -1,0 +1,34 @@
+<div>
+  <app-header>
+    <a href="https://alpinejs.dev/" target="_blank">Alpinejs</a>
+  </app-header>
+  <hr />
+  <my-tabs :tabs="tabs" :active-tab="activeTab" @change="setActiveTab($event.detail.id)">
+    <template x-if="activeTab === 'counter'">
+      <add-counter slot="counter"></add-counter>
+    </template>
+    <template x-if="activeTab === 'todo-list'">
+      <my-todo-list slot="todo-list"></my-todo-list>
+    </template>
+  </my-tabs>
+</div>
+
+<script>
+  import './tabs/my-tabs.htm'
+  import './app-header.htm'
+  import './counter/add-counter.htm'
+  import './todo-list/my-todo-list.htm'
+
+  export default () => {
+    return {
+      tabs: [
+        { key: 'counter', title: 'counter' },
+        { key: 'todo-list', title: 'todo list' },
+      ],
+      activeTab: 'counter',
+      setActiveTab(tab) {
+        this.activeTab = tab
+      },
+    }
+  }
+</script>

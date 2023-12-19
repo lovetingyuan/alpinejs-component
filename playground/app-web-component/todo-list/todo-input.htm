@@ -1,0 +1,35 @@
+<div>
+  <h3 class="capitalize" x-text="`todo list (${$todoList.list.length})`"></h3>
+  <input
+    type="text"
+    class="px-3 py-1 text-base align-middle"
+    placeholder="input event"
+    @keyup.enter="addEvent"
+    x-model="userInput"
+  />
+  <button class="px-3 py-1 text-base align-middle cursor-pointer capitalize" @click="addEvent">
+    add
+  </button>
+  <select class="px-3 py-2 text-base align-middle" name="status" x-model="$todoList.status">
+    <option value="all">all</option>
+    <option value="todo">todo</option>
+    <option value="doing">doing</option>
+    <option value="done">done</option>
+  </select>
+</div>
+
+<script>
+  import $todoList from './todo-list.store'
+  export default () => ({
+    $todoList,
+    userInput: '',
+
+    addEvent() {
+      if (!this.userInput) {
+        return
+      }
+      $todoList.add(this.userInput)
+      this.userInput = ''
+    },
+  })
+</script>

@@ -1,0 +1,19 @@
+<div>
+  <todo-input></todo-input>
+  <hr />
+  <todo-list></todo-list>
+</div>
+
+<script>
+  import './todo-input.htm'
+  import './todo-list.htm'
+  import $todoList from './todo-list.store'
+
+  export default () => {
+    return {
+      get count() {
+        return $todoList.list.length
+      },
+    }
+  }
+</script>

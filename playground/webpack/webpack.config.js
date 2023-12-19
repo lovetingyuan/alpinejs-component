@@ -33,29 +33,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
-      },
-      {
-        test: /\.css$/i,
-        include: require.resolve('app'),
-        use: [
-          'style-loader',
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: {
-                  tailwindcss: {},
-                  autoprefixer: {},
-                },
-              },
-            },
-          },
-        ],
-      },
-      {
         test: /\.ts$/,
         exclude: /node_modules/,
         use: {
@@ -64,6 +41,10 @@ module.exports = {
             plugins: ['@babel/plugin-transform-typescript'],
           },
         },
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
     ],
   },

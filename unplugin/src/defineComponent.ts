@@ -19,7 +19,7 @@ const ignoreProps = (name: string) => {
 }
 
 Alpine.magic('props', el => {
-  const comp = el.closest('[data-component]')
+  const comp = el.closest('[x-data$="$"]')
   // @ts-ignore
   if (comp?.type !== 'alpine') {
     console.warn(`"$props" magic variable can only be used inner component.`, el)
@@ -27,6 +27,7 @@ Alpine.magic('props', el => {
   }
   return propsCompMap.get(comp)
 })
+
 /**
  * You should NOT import this module by yourself.
  * It is used for plugin and bundler tools internally.
@@ -58,16 +59,15 @@ export function defineComponent(
     class extends HTMLElement {
       constructor() {
         super()
+        const _props = Alpine.reactive(Object.create(props))
+        propsCompMap.set(this, _props)
       }
       static type = 'alpine'
       type = 'alpine'
       connectedCallback() {
-        super.setAttribute('data-component', '')
-        const _props = Alpine.reactive(Object.create(props))
-        propsCompMap.set(this, _props)
         queueMicrotask(() => {
-          this.appendChild(templateContainer.content.cloneNode(true))
           super.setAttribute('x-data', scopeName)
+          this.appendChild(templateContainer.content.cloneNode(true))
         })
       }
 
@@ -103,6 +103,8 @@ export function defineComponent(
 
       disconnectedCallback() {
         propsCompMap.delete(this)
+        // @ts-ignore
+        delete this.__x
       }
 
       adoptedCallback() {}

@@ -1,0 +1,63 @@
+<ol>
+  <template x-for="item in $todoList.displayList">
+    <li x-data="{ editing: false, title: item.title }" class="my-2">
+      <template x-if="editing">
+        <input type="text" @keyup.enter="handleEditDone" @blur="handleEditDone" x-model="title" />
+      </template>
+      <template x-if="!editing">
+        <span x-text="item.title"></span>
+      </template>
+      <span @click="$todoList.delete(item.id)" class="cursor-pointer">❎</span>
+      <span
+        >status:
+        <button
+          :disabled="item.status === 'done'"
+          x-text="item.status"
+          @click="$todoList.changeStatus(item.id)"
+        ></button>
+        <button @click="editing = !editing" x-show="!editing">edit</button>
+      </span>
+    </li>
+  </template>
+  <template x-if="$todoList.displayList.length === 0">
+    <p>List is empty.</p>
+  </template>
+</ol>
+
+<style>
+  button {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.4em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.25s;
+  }
+
+  button:hover {
+    border-color: #646cff;
+  }
+
+  button:focus,
+  button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+  }
+</style>
+
+<script>
+  import $todoList from './todo-list.store'
+
+  export default () => ({
+    $todoList,
+    handleEditDone() {
+      if (!this.title) {
+        this.title = this.item.title
+      } else {
+        this.item.title = this.title
+      }
+      this.editing = false
+    },
+  })
+</script>
