@@ -4,10 +4,14 @@
 
   <button @click="setActiveTab(activeTab === 'todo-list' ? 'counter' : 'todo-list')">change</button>
   <button @click="show = !show">show</button>
-  <!-- <my-tabs :tabs="tabs" :active-tab="activeTab" @change="setActiveTab($event.detail.id)"></my-tabs> -->
   <template x-if="show">
     <div>
-      <my-tabs> </my-tabs>
+      <my-tabs
+        :tabs="tabs"
+        :active-tab="activeTab"
+        @change="setActiveTab($event.detail.id)"
+      ></my-tabs>
+      <!-- <my-tabs> </my-tabs> -->
       <!-- <template x-if="activeTab === 'counter'">
         <add-counter :init-num="13"></add-counter>
       </template>
@@ -26,7 +30,6 @@
 
   export default function () {
     return {
-      foo: 'fffff',
       show: true,
       tabs: [
         { key: 'counter', title: 'counter' },
