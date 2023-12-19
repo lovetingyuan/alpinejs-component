@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>alpinejs</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js"></script>
+  </head>
+  <body>
+    <script>
+      document.addEventListener('alpine:init', () => {
+        Alpine.data('aaa', () => {
+          return {
+            show: true,
+            activeTab: 'active tab:',
+          }
+        })
+        Alpine.data('bbb', () => {
+          return {
+            largeData: Array.from({ length: 1000000 }).map(v => {
+              return { v }
+            }),
+            tabs: [
+              { title: 'aa', key: 'aa' },
+              { title: 'bb', key: 'bb' },
+            ],
+          }
+        })
+      })
+    </script>
+    <div id="app">
+      <h1 x-data="{ message: 'I ❤️ Alpine' }" x-text="message"></h1>
+      <div x-data="aaa">
+        <button @click="show = !show">click me many times, memory leaks</button>
+        <template x-if="show">
+          <div x-data="bbb">
+            <div class="my-5">
+              <template x-for="tab in tabs" :key="tab.key">
+                <p>
+                  <span x-text="activeTab"></span>
+                  <span x-text="tab.title"> </span>
+                </p>
+              </template>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </body>
+</html>

@@ -17,30 +17,39 @@ const ignoreProps = (name: string) => {
   }
   return false
 }
+const aaa = { tabs: [{ title: 'ffff', key: 'dd' }] }
 
 Alpine.magic('props', el => {
   // console.log('get props', el)
 
-  return {
-    tabs: [{ title: 'fooo', key: 'sdf' }],
-  }
+  // return {
+  //   tabs: [{ title: 'fooo', key: 'sdf' }],
+  // }
   // el._props = el._props || Alpine.reactive(Object.create(props))
   // if (el.type === 'alpine') {
   //   return el._props
   // }
   const comp = el.closest('[data-component]')
+  // // @ts-ignore
   if (comp?.type !== 'alpine') {
     console.warn(`"$props" magic variable can only be used inner component.`, el)
     return
   }
+  // console.log(comp)
   const _props = propsCompMap.get(comp)
   return _props
-
+  // return { ..._props }
+  // console.log(11, _props)
+  // console.log(_props.tabs)
+  return {
+    ..._props,
+    tabs: _props.tabs.map(v => ({ ...v })),
+  }
+  // return { tabs: [{ title: 'ffff', key: 'dd' }] }
   // if (comp.type === 'alpine') {
   //   return comp._props
   // }
 })
-
 /**
  * You should NOT import this module by yourself.
  * It is used for plugin and bundler tools internally.
@@ -64,9 +73,9 @@ export function defineComponent(
 
   Alpine.data(scopeName, function (this: any) {
     const scope = setup?.call(this) || {}
-    if (this.$el && !this.$el._scope) {
-      this.$el._scope = scope
-    }
+    // if (this.$el && !this.$el._scope) {
+    //   this.$el._scope = scope
+    // }
     // console.log('x-data', componentName, scope)
 
     return scope
@@ -77,8 +86,7 @@ export function defineComponent(
     class extends HTMLElement {
       constructor() {
         super()
-        const _props = Alpine.reactive(Object.create(props))
-        propsCompMap.set(this, _props)
+
         // this._props = this._props || Alpine.reactive(Object.create(props))
       }
       static type = 'alpine'
@@ -91,13 +99,16 @@ export function defineComponent(
       // get _x_dataStack() {
       //   this.#_x_dataStack
       // }
-      _scope = null
+      // _scope = null
       // _props = Alpine.reactive(Object.create(props))
       connectedCallback() {
-        this.setAttribute('data-component', '')
+        super.setAttribute('data-component', '')
+        // console.log(44, propsCompMap.get(this))
+        const _props = Alpine.reactive(Object.create(props))
+        propsCompMap.set(this, _props)
         queueMicrotask(() => {
           this.appendChild(templateContainer.content.cloneNode(true))
-          this.setAttribute('x-data', scopeName)
+          super.setAttribute('x-data', scopeName)
         })
       }
 
@@ -139,7 +150,7 @@ export function defineComponent(
       }
 
       disconnectedCallback() {
-        this._scope = null
+        // this._scope = null
         propsCompMap.delete(this)
         // delete this._scope
         // this._props = null
