@@ -1,35 +1,22 @@
-<div>
-  <div class="my-5">
-    <p x-text="$props.tabs.length"></p>
-    <template x-for="tab in $props.tabs" :key="tab.key">
-      <span x-text="tab.title">55</span>
-      <!-- <p x-text="tab.title"></p> -->
-      <!-- <span
-        x-text="tab.title"
-        class="mx-2 px-3 py-1 cursor-pointer rounded-md border-2 border-solid hover:font-bold"
-        :class="activeTab === tab.key ? 'text-green-600 font-bold' : ''"
-        @click="switchTab(tab.key)"
-      >
-      </span> -->
-    </template>
-  </div>
-  <!-- <div class="p-3 bg-slate-100 rounded-md">
-    <slot :name="activeTab"></slot>
-  </div> -->
+<div class="my-5">
+  <template x-for="tab in $props.tabs" :key="tab.key">
+    <span
+      x-text="tab.title"
+      class="mx-2 px-3 py-1 cursor-pointer rounded-md border-2 border-solid hover:font-bold"
+      :class="activeTab === tab.key ? 'text-green-600 font-bold' : ''"
+      @click="switchTab(tab.key)"
+    >
+    </span>
+  </template>
 </div>
 
 <script>
   export const $props = {
-    tabs: [{ title: 'aa', key: 'aa' }],
+    tabs: [],
     activeTab: '',
   }
   export default function () {
     return {
-      ff: Array.from({ length: 1000000 }).map(v => {
-        return { v }
-      }),
-      tabs: [{ title: 'aa', key: 'aa' }],
-
       activeTab: this.$props.activeTab,
       propsChange(name, value) {
         this.activeTab = this.$props.activeTab

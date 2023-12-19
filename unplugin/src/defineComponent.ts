@@ -7,7 +7,6 @@ requestAnimationFrame(() => {
 })
 
 const propsCompMap = new WeakMap()
-const scopesCompMap = new WeakMap()
 
 const ignoreProps = (name: string) => {
   if (name.startsWith('x-') || name.startsWith(':') || name.startsWith('@')) {
@@ -20,28 +19,14 @@ const ignoreProps = (name: string) => {
 }
 
 Alpine.magic('props', el => {
-  // console.log('get props', el)
-
-  // return {
-  //   tabs: [{ title: 'fooo', key: 'sdf' }],
-  // }
-  // el._props = el._props || Alpine.reactive(Object.create(props))
-  // if (el.type === 'alpine') {
-  //   return el._props
-  // }
-  // const comp = el.closest('[data-component]')
-  // if (comp?.type !== 'alpine') {
-  //   console.warn(`"$props" magic variable can only be used inner component.`, el)
-  //   return
-  // }
-  const _props = propsCompMap.get(el.closest('[data-component]')!)
-  return _props
-
-  // if (comp.type === 'alpine') {
-  //   return comp._props
-  // }
+  const comp = el.closest('[data-component]')
+  // @ts-ignore
+  if (comp?.type !== 'alpine') {
+    console.warn(`"$props" magic variable can only be used inner component.`, el)
+    return
+  }
+  return propsCompMap.get(comp)
 })
-
 /**
  * You should NOT import this module by yourself.
  * It is used for plugin and bundler tools internally.
@@ -65,13 +50,6 @@ export function defineComponent(
 
   Alpine.data(scopeName, function (this: any) {
     const scope = setup?.call(this) || {}
-    // if (this.$el && !this.$el._scope) {
-    //   this.$el._scope = scope
-    // }
-    // scopesCompMap.set(this.$el, scope)
-
-    // console.log('x-data', componentName, scope)
-
     return scope
   })
 
@@ -80,34 +58,20 @@ export function defineComponent(
     class extends HTMLElement {
       constructor() {
         super()
-        // const _props = Alpine.reactive(Object.create(props))
-        // propsCompMap.set(this, _props)
-        // this._props = this._props || Alpine.reactive(Object.create(props))
       }
       static type = 'alpine'
       type = 'alpine'
-      // _props = Alpine.reactive(Object.create(props))
-      // #_x_dataStack = []
-      // set _x_dataStack(scopes) {
-      //   this.#_x_dataStack = scopes[0] ? [scopes[0]] : []
-      // }
-      // get _x_dataStack() {
-      //   this.#_x_dataStack
-      // }
-      _scope = null
-      // _props = Alpine.reactive(Object.create(props))
       connectedCallback() {
-        this.setAttribute('data-component', '')
+        super.setAttribute('data-component', '')
         const _props = Alpine.reactive(Object.create(props))
         propsCompMap.set(this, _props)
         queueMicrotask(() => {
           this.appendChild(templateContainer.content.cloneNode(true))
-          this.setAttribute('x-data', scopeName)
+          super.setAttribute('x-data', scopeName)
         })
       }
 
       setAttribute(name: string, value: string): void {
-        // console.log('set attr', name, componentName)
         if (ignoreProps(name)) {
           super.setAttribute(name, value)
           return
@@ -120,7 +84,6 @@ export function defineComponent(
           )
           super.setAttribute(name, value)
         } else {
-          // this._props = this._props || Alpine.reactive(Object.create(props))
           const _props = propsCompMap.get(this)
           _props[propName] = value
         }
@@ -132,25 +95,14 @@ export function defineComponent(
         }
         const propName = name.replace(/-([a-z])/g, (_, c) => c.toUpperCase())
         if (!(propName in props)) {
-          // console.warn(
-          //   `component "${componentName}" received prop "${name}" but not defined in $props.`,
-          //   this
-          // )
           return super.getAttribute(name)
         }
-        // this._props = this._props || Alpine.reactive(Object.create(props))
         const _props = propsCompMap.get(this)
         return _props[propName]
       }
 
       disconnectedCallback() {
-        this._scope = null
         propsCompMap.delete(this)
-        // console.log(999, propsCompMap)
-
-        // delete this._scope
-        // this._props = null
-        // delete this._props
       }
 
       adoptedCallback() {}

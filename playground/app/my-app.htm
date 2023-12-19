@@ -11,13 +11,12 @@
         :active-tab="activeTab"
         @change="setActiveTab($event.detail.id)"
       ></my-tabs>
-      <!-- <my-tabs> </my-tabs> -->
-      <!-- <template x-if="activeTab === 'counter'">
-        <add-counter :init-num="13"></add-counter>
+      <template x-if="activeTab === 'counter'">
+        <add-counter :init-num="1"></add-counter>
       </template>
       <template x-if="activeTab === 'todo-list'">
         <my-todo-list></my-todo-list>
-      </template> -->
+      </template>
     </div>
   </template>
 </div>
