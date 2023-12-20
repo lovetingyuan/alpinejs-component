@@ -13,7 +13,7 @@
   export default function () {
     return {
       get count() {
-        return $todoList.list.length
+        return this.$store.todoList.list.length
       },
     }
   }

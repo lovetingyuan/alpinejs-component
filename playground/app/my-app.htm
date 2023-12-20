@@ -1,13 +1,17 @@
 <div>
-  <app-header> </app-header>
+  <app-header></app-header>
   <hr />
-
-  <my-tabs :tabs="tabs" :active-tab="activeTab" @change="setActiveTab($event.detail.id)"></my-tabs>
-  <template x-if="activeTab === 'counter'">
-    <add-counter :init-num="1"></add-counter>
-  </template>
-  <template x-if="activeTab === 'todo-list'">
-    <my-todo-list></my-todo-list>
+  <button @click="show = !show">cshow</button>
+  <template x-if="show">
+    <my-tabs :tabs="tabs" :active-tab="activeTab" @change-tab="setActiveTab($event.detail.id);">
+      <template default></template>
+      <template x-if="activeTab === 'counter'">
+        <add-counter :init-num="666" style="background: red"></add-counter>
+      </template>
+      <template x-if="activeTab === 'todo-list'">
+        <my-todo-list></my-todo-list>
+      </template>
+    </my-tabs>
   </template>
 </div>
 

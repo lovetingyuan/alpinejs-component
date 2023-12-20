@@ -15,7 +15,7 @@ Alpine.store('todoList', {
   add(item) {
     this.list.push({
       title: item,
-      id: item,
+      id: Math.random().toString(),
       status: 'todo',
     })
   },
