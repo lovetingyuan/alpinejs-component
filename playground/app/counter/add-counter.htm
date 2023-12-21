@@ -2,7 +2,7 @@
   <span class="font-bold">Counter:</span>
   <span x-text="count" class="text-xl"></span>
   <button @click="add">Increment</button>
-  <!-- <button @click="count = $props.initNum">reset</button> -->
+  <button @click="count = $props.initNum">reset</button>
 </div>
 
 <script>
@@ -12,10 +12,10 @@
     step: 1,
   }
   export default function () {
-    // const { initNum } = this.$props
+    const { initNum } = this.$props
     return {
-      count: 9,
-      ff: Array.from({ length: 3000000 }).map(n => ({ n })),
+      count: initNum,
+      // ff: Array.from({ length: 3000000 }).map(n => ({ n })),
       add() {
         this.count++
       },

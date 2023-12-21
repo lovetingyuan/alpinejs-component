@@ -42,9 +42,7 @@ export default async function start(container) {
 
   const root = typeof container === 'string' ? document.querySelector(container) : container
   if (root) {
-    root.innerHTML = ''
-    const app = document.createElement('my-app')
-    root.appendChild(app)
+    root.replaceChildren(document.createElement('my-app'))
   }
   Alpine.start()
 }
