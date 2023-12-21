@@ -7,13 +7,44 @@ requestAnimationFrame(() => {
 })
 
 const propsCompMap = new WeakMap()
-const div = document.createElement('div')
+const globalAttrs = [
+  'accesskey',
+  'autocapitalize',
+  'autofocus',
+  'class',
+  'contenteditable',
+  'dir',
+  'draggable',
+  'enterkeyhint',
+  'hidden',
+  'id',
+  'inert',
+  'inputmode',
+  'is',
+  'itemid',
+  'itemprop',
+  'itemref',
+  'itemscope',
+  'itemtype',
+  'lang',
+  'nonce',
+  'popover',
+  'slot',
+  'spellcheck',
+  'style',
+  'tabindex',
+  'title',
+  'translate',
+].reduce((m, k) => {
+  m[k] = true
+  return m
+}, {} as any)
 
 const ignoreProps = (name: string) => {
   if (name.startsWith('x-') || name.startsWith(':') || name.startsWith('@')) {
     return true
   }
-  if (name.startsWith('data-')) {
+  if (name.startsWith('data-') || name.startsWith('aria-')) {
     return true
   }
   return false
@@ -50,12 +81,12 @@ export function defineComponent(
   const templateContainer = document.createElement('template')
   templateContainer.innerHTML = template
 
+  Alpine.addRootSelector(() => componentName)
+
   Alpine.data(scopeName, function (this: any) {
     const scope = setup?.call(this) || {}
     const _init = scope.init
-    console.log('data', componentName, this)
     scope.init = function init() {
-      console.log('init', componentName, this)
       if (this.$el._x_dataStack?.length) {
         this.$el._x_dataStack = [this.$el._x_dataStack[0]]
       }
@@ -65,10 +96,13 @@ export function defineComponent(
       if (scope.propsChange) {
         this.$el._x_effects.add(
           Alpine.effect(() => {
-            this.$data.propsChange()
+            if (this.$el._init) {
+              this.$data.propsChange()
+            }
           })
         )
       }
+      this.$el._init = true
       if (_init) {
         return _init.call(this)
       }
@@ -97,12 +131,13 @@ export function defineComponent(
         return Alpine.raw(this._x_dataStack[0])
       }
       connectedCallback() {
-        // console.log('connected', componentName)
+        if (super.hasAttribute('x-data')) {
+          console.error(`component "${componentName}" can not have attribute "x-data".`, this)
+        }
+
         queueMicrotask(() => {
-          // if (componentName !== 'add-counter') {
           super.setAttribute('x-data', scopeName)
-          super.setAttribute(':id', `$id("${componentName}")`)
-          // }
+
           const content = templateContainer.content.cloneNode(true)
           const defaultPlaceholder = this.querySelector('template[default]')
           if (defaultPlaceholder) {
@@ -123,7 +158,7 @@ export function defineComponent(
           const _props = propsCompMap.get(this)
           _props[propName] = value
         } else {
-          if (!(propName in div)) {
+          if (!globalAttrs[name]) {
             console.warn(
               `component "${componentName}" received prop "${name}" but not defined in $props.`,
               this

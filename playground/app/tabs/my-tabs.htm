@@ -1,8 +1,5 @@
 <div class="my-5">
-  <template x-for="i in 3">
-    <p x-data="{a: $props.tabs}"></p>
-  </template>
-  <!-- <template x-for="tab in $props.tabs" :key="tab.key">
+  <template x-for="tab in $props.tabs" :key="tab.key">
     <span
       x-text="tab.title"
       class="mx-2 px-3 py-1 cursor-pointer rounded-md border-2 border-solid hover:font-bold"
@@ -10,7 +7,7 @@
       @click="switchTab(tab.key)"
     >
     </span>
-  </template> -->
+  </template>
 </div>
 
 <script>
@@ -20,7 +17,7 @@
   }
   export default function () {
     return {
-      activeTab: '',
+      activeTab: this.$props.activeTab,
       propsChange() {
         this.activeTab = this.$props.activeTab
       },

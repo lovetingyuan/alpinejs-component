@@ -69,7 +69,6 @@ async function compileTemplate(
 interface Options {
   fileExt: `.${string}`
   minify?: boolean
-  // debug?: boolean
 }
 
 export const unplugin = createUnplugin((options?: Options) => {
