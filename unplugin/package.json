@@ -1,6 +1,6 @@
 {
   "name": "unplugin-alpinejs-component",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Combine Alpinejs and Component.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -53,9 +53,9 @@
   "author": "tingyuan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lovetingyuan/unplugin-alpinejs-webcomponent/issues"
+    "url": "https://github.com/lovetingyuan/alpinejs-component/issues"
   },
-  "homepage": "https://github.com/lovetingyuan/unplugin-alpinejs-webcomponent#readme",
+  "homepage": "https://github.com/lovetingyuan/alpinejs-component#readme",
   "dependencies": {
     "cssnano": "^6.0.1",
     "html-minifier-terser": "^7.2.0",
@@ -76,6 +76,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lovetingyuan/unplugin-alpinejs-webcomponent.git"
+    "url": "git+https://github.com/lovetingyuan/alpinejs-component.git"
   }
 }
