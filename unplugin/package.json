@@ -34,7 +34,8 @@
   "scripts": {
     "build": "npx unbuild",
     "lint": "npx oxlint@latest",
-    "test": "npx tsx tests/index.ts"
+    "test": "npx tsx tests/index.ts",
+    "prepublishOnly": "npm test && npm run build"
   },
   "keywords": [
     "alpinejs",
