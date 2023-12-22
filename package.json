@@ -4,7 +4,7 @@
   "description": "use alpinejs with component style.",
   "main": "index.js",
   "scripts": {
-    "test": "run-p -l build:**",
+    "test": "npm run test --workspace unplugin-alpinejs-component && run-p -l build:**",
     "lint": "npx oxlint@latest",
     "build": "npm run build --workspace unplugin-alpinejs-component",
     "vite": "npm run dev --workspace vite-play",
