@@ -34,7 +34,8 @@
   "scripts": {
     "build": "npx unbuild",
     "lint": "npx oxlint@latest",
-    "test": "npx tsx tests/index.ts"
+    "test": "npx tsx tests/index.ts",
+    "prepublishOnly": "npm test && npm run build"
   },
   "keywords": [
     "alpinejs",
@@ -53,9 +54,9 @@
   "author": "tingyuan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lovetingyuan/unplugin-alpinejs-webcomponent/issues"
+    "url": "https://github.com/lovetingyuan/alpinejs-component/issues"
   },
-  "homepage": "https://github.com/lovetingyuan/unplugin-alpinejs-webcomponent#readme",
+  "homepage": "https://github.com/lovetingyuan/alpinejs-component#readme",
   "dependencies": {
     "cssnano": "^6.0.1",
     "html-minifier-terser": "^7.2.0",
@@ -76,6 +77,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lovetingyuan/unplugin-alpinejs-webcomponent.git"
+    "url": "git+https://github.com/lovetingyuan/alpinejs-component.git"
   }
 }
