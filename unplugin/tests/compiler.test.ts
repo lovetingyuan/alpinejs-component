@@ -25,14 +25,14 @@ export default a
 
 describe('htm-compiler', () => {
   it('file1', async t => {
-    const context = {}
+    const context: any = {}
     const { code, template } = await compileTemplate.call(context, file1, 'a-b', false)
     assert.ok(code === '')
     assert.ok(template === '<p a>sdkfjdsl</p>')
   })
 
   it('file2', async t => {
-    const context = {}
+    const context: any = {}
     const { code, template } = await compileTemplate.call(context, file2, 'a-b', false)
     assert.equal(
       code,
@@ -45,7 +45,7 @@ export default a
   })
 
   it('file3', async t => {
-    const context = {}
+    const context: any = {}
     const { code, template } = await compileTemplate.call(context, file3, 'a-b', false)
     assert.equal(
       code,

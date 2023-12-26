@@ -15,7 +15,7 @@ export default a
 
 describe('htm-compiler-error', () => {
   it('file1', async t => {
-    const context = {
+    const context: any = {
       error: mock.fn(),
     }
     await compileTemplate.call(context, file1, 'a-b', false)

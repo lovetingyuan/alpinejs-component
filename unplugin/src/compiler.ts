@@ -27,7 +27,6 @@ export async function compileTemplate(
   const doc = parse(htmlstr, {
     onParseError: err => {
       if (err.code !== 'missing-doctype') {
-        console.log(22, err)
         this.error(
           `component "${name}" contains invalid HTML5 syntax(${err.code} at line ${err.startLine}:${err.startCol}).`
         )

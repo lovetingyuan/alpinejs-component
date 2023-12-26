@@ -1,6 +1,6 @@
 {
   "name": "unplugin-alpinejs-component",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Combine Alpinejs and Component.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
