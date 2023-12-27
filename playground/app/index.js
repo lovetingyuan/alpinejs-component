@@ -1,5 +1,6 @@
 import Alpine from 'alpinejs'
 import './style.css'
+import 'iconify-icon'
 
 window.Alpine = Alpine
 Alpine.data('counter', function () {

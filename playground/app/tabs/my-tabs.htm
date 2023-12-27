@@ -1,12 +1,12 @@
-<div class="my-5">
+<div role="tablist" class="tabs tabs-lifted my-4">
   <template x-for="tab in $props.tabs" :key="tab.key">
-    <span
-      x-text="tab.title"
-      class="mx-2 px-3 py-1 cursor-pointer rounded-md border-2 border-solid hover:font-bold"
-      :class="activeTab === tab.key ? 'text-green-600 font-bold' : ''"
+    <a
+      role="tab"
+      class="tab capitalize"
       @click="switchTab(tab.key)"
-    >
-    </span>
+      :class="activeTab === tab.key ? 'tab-active text-primary' : ''"
+      x-text="tab.title"
+    ></a>
   </template>
 </div>
 

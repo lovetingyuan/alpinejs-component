@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require('daisyui')],
   corePlugins: {
-    preflight: false,
+    // preflight: false,
   },
 }

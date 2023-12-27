@@ -1,24 +1,21 @@
 <div>
   <app-header></app-header>
-  <hr />
-  <button @click="show = !show">cshow</button>
-  <template x-if="show">
-    <my-tabs :tabs="tabs" :active-tab="activeTab" @change-tab="setActiveTab($event.detail.id);">
-      <template default></template>
-      <template x-if="activeTab === 'counter'">
-        <add-counter :init-num="666" style="background: red"></add-counter>
-      </template>
-      <template x-if="activeTab === 'todo-list'">
-        <my-todo-list></my-todo-list>
-      </template>
-      <template x-if="activeTab === 'time-clock'">
-        <time-clock></time-clock>
-      </template>
-      <template x-if="activeTab === 'temperature'">
-        <temperature-converter></temperature-converter>
-      </template>
-    </my-tabs>
-  </template>
+  <div class="divider"></div>
+  <my-tabs :tabs="tabs" :active-tab="activeTab" @change-tab="setActiveTab($event.detail.id);">
+    <template default></template>
+    <template x-if="activeTab === 'counter'">
+      <add-counter :init-num="666" style="background: red"></add-counter>
+    </template>
+    <template x-if="activeTab === 'todo-list'">
+      <my-todo-list></my-todo-list>
+    </template>
+    <template x-if="activeTab === 'time-clock'">
+      <time-clock></time-clock>
+    </template>
+    <template x-if="activeTab === 'temperature'">
+      <temperature-converter></temperature-converter>
+    </template>
+  </my-tabs>
 </div>
 
 <script>
@@ -31,7 +28,7 @@
 
   export default function () {
     return {
-      show: true,
+      show: 'true',
       tabs: [
         { key: 'counter', title: 'counter' },
         { key: 'todo-list', title: 'todo list' },

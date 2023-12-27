@@ -1,12 +1,12 @@
 <input
   type="text"
-  class="px-3 py-1 text-base"
+  class="input input-sm input-bordered"
   placeholder="input event"
   @keyup.enter="addEvent"
   x-model="userInput"
 />
-<button class="mx-3 capitalize" @click="addEvent">add</button>
-<select class="px-3 py-2 text-base" name="status" x-model="$store.todoList.status">
+<button class="btn btn-sm btn-primary mx-3" @click="addEvent">Add</button>
+<select class="select select-sm select-bordered" name="status" x-model="$store.todoList.status">
   <option value="all">all</option>
   <option value="todo">todo</option>
   <option value="doing">doing</option>

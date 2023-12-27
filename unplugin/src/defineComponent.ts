@@ -130,6 +130,15 @@ export function defineComponent(
         // @ts-ignore
         return Alpine.raw(this._x_dataStack[0])
       }
+      render() {
+        const content = templateContainer.content.cloneNode(true)
+        const defaultPlaceholder = this.querySelector('template[default]')
+        if (defaultPlaceholder) {
+          defaultPlaceholder.replaceWith(content)
+        } else {
+          this.appendChild(content)
+        }
+      }
       connectedCallback() {
         if (super.hasAttribute('x-data')) {
           console.error(`component "${componentName}" can not have attribute "x-data".`, this)
@@ -137,14 +146,8 @@ export function defineComponent(
 
         queueMicrotask(() => {
           super.setAttribute('x-data', scopeName)
-
-          const content = templateContainer.content.cloneNode(true)
-          const defaultPlaceholder = this.querySelector('template[default]')
-          if (defaultPlaceholder) {
-            defaultPlaceholder.replaceWith(content)
-          } else {
-            this.appendChild(content)
-          }
+          const init = super.getAttribute('x-init')
+          super.setAttribute('x-init', (init ? init + ';' : '') + '$el.render()')
         })
       }
 

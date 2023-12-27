@@ -1,6 +1,16 @@
-<input :value="c" @input="setBothFromC($event.target.value)" type="number" class="w-12" />
+<input
+  class="input input-bordered input-sm w-20"
+  :value="c"
+  @input="setBothFromC($event.target.value)"
+  type="number"
+/>
 <span> °C = </span
-><input :value="f" @input="setBothFromF($event.target.value)" type="number" class="w-12" />
+><input
+  class="input input-bordered input-sm w-20"
+  :value="f"
+  @input="setBothFromF($event.target.value)"
+  type="number"
+/>
 <span> °F</span>
 
 <script>

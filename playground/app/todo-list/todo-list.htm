@@ -1,22 +1,31 @@
-<ol>
+<ol class="list-decimal pl-5">
   <template x-for="item in $todoList.displayList" :key="item.id">
-    <li x-data="{ editing: false, title: item.title }" class="my-2">
+    <li x-data="{ editing: false, title: item.title }" class="my-3 select-none">
       <template x-if="editing">
-        <input type="text" @keyup.enter="handleEditDone" @blur="handleEditDone" x-model="title" />
+        <input
+          type="text"
+          class="input input-info input-bordered input-sm"
+          @keyup.enter="handleEditDone"
+          @blur="handleEditDone"
+          x-model="title"
+        />
       </template>
       <template x-if="!editing">
-        <span x-text="item.title"></span>
+        <span x-text="item.title" class="select-text"></span>
       </template>
-      <span @click="$todoList.delete(item.id)" class="cursor-pointer">❎</span>
-      <span
-        >status:
-        <button
-          :disabled="item.status === 'done'"
-          x-text="item.status"
+      <div class="mx-3 inline-flex gap-3 items-center">
+        <span
           @click="$todoList.changeStatus(item.id)"
-        ></button>
-        <button @click="editing = !editing" x-show="!editing">edit</button>
-      </span>
+          class="badge badge-md badge-outline badge-primary cursor-pointer"
+          x-text="item.status"
+        ></span>
+        <button @click="editing = !editing" class="btn btn-xs btn-square">
+          <iconify-icon icon="mdi:edit" class="text-base text-green-600"></iconify-icon>
+        </button>
+        <button @click="$todoList.delete(item.id)" class="btn btn-xs btn-square">
+          <iconify-icon icon="mdi:delete" class="text-base text-gray-600"></iconify-icon>
+        </button>
+      </div>
     </li>
   </template>
   <template x-if="$todoList.displayList.length === 0">
