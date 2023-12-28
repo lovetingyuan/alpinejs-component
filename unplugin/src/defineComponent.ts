@@ -74,35 +74,38 @@ export function defineComponent(
   }: {
     template: string
     props: Record<string, any>
-    setup: null | (() => Record<string, any>)
+    setup: null | ((props: Record<string, any>) => Record<string, any>)
   }
 ) {
   const scopeName = `${componentName.replace(/-/g, '_')}$`
   const templateContainer = document.createElement('template')
   templateContainer.innerHTML = template
 
-  Alpine.addRootSelector(() => componentName)
+  // Alpine.addRootSelector(() => componentName)
 
   Alpine.data(scopeName, function (this: any) {
-    const scope = setup?.call(this) || {}
+    // console.log('x-data', scopeName)
+    const props = propsCompMap.get(this.$el)
+    const scope = setup?.call(this, props) || {}
     const _init = scope.init
     scope.init = function init() {
-      if (this.$el._x_dataStack?.length) {
-        this.$el._x_dataStack = [this.$el._x_dataStack[0]]
-      }
+      // console.log('init', scopeName)
+      // if (this.$el._x_dataStack?.length) {
+      //   this.$el._x_dataStack = [this.$el._x_dataStack[0]]
+      // }
       if (!this.$el._x_effects) {
         this.$el._x_effects = new Set()
       }
       if (scope.propsChange) {
         this.$el._x_effects.add(
           Alpine.effect(() => {
-            if (this.$el._init) {
-              this.$data.propsChange()
-            }
+            // if (this.$el._init) {
+            this.$data.propsChange()
+            // }
           })
         )
       }
-      this.$el._init = true
+      // this.$el._init = true
       if (_init) {
         return _init.call(this)
       }
@@ -118,6 +121,7 @@ export function defineComponent(
         super()
         const _props = Alpine.reactive(Object.create({ ...props }))
         propsCompMap.set(this, _props)
+        // super.setAttribute('x-ignore', '')
       }
       static type = 'alpine'
       type = 'alpine'
@@ -131,6 +135,12 @@ export function defineComponent(
         return Alpine.raw(this._x_dataStack[0])
       }
       render() {
+        // console.log('render', componentName)
+        // @ts-ignore
+        if (this._x_dataStack?.length) {
+          // @ts-ignore
+          this._x_dataStack = [this._x_dataStack[0]]
+        }
         const content = templateContainer.content.cloneNode(true)
         const defaultPlaceholder = this.querySelector('template[default]')
         if (defaultPlaceholder) {
@@ -140,18 +150,28 @@ export function defineComponent(
         }
       }
       connectedCallback() {
+        // console.log('connect', componentName)
         if (super.hasAttribute('x-data')) {
           console.error(`component "${componentName}" can not have attribute "x-data".`, this)
         }
-
+        // super.removeAttribute('x-ignore')
+        // if (this._x_dataStack?.length) {
+        //   this._x_dataStack = [this._x_dataStack[0]]
+        // }
         queueMicrotask(() => {
+          // console.log('set x-data', componentName)
           super.setAttribute('x-data', scopeName)
+          // super.removeAttribute('x-ignore')
           const init = super.getAttribute('x-init')
+          // if (this._x_dataStack?.length) {
+          //   this._x_dataStack = [this._x_dataStack[0]]
+          // }
           super.setAttribute('x-init', (init ? init + ';' : '') + '$el.render()')
         })
       }
 
       setAttribute(name: string, value: string): void {
+        // console.log('setAttribute', name, value, componentName)
         if (ignoreProps(name)) {
           super.setAttribute(name, value)
           return
@@ -159,7 +179,9 @@ export function defineComponent(
         const propName = name.replace(/-([a-z])/g, (_, c) => c.toUpperCase())
         if (propName in props) {
           const _props = propsCompMap.get(this)
-          _props[propName] = value
+          const type = typeof props[propName]
+          _props[propName] =
+            type === 'number' ? Number(value) : type === 'boolean' ? Boolean(value) : value
         } else {
           if (!globalAttrs[name]) {
             console.warn(

@@ -10,13 +10,18 @@
     initNum: 0,
     step: 1,
   }
-  export default function () {
-    const { initNum } = this.$props
+  export default function (props) {
+    const { initNum } = props
     return {
       count: initNum,
+      // step,
+      // propsChange() {
+      //   console.log('props change')
+      //   this.step = props.step
+      // },
       // ff: Array.from({ length: 3000000 }).map(n => ({ n })),
       add() {
-        this.count++
+        this.count += props.step
       },
     }
   }

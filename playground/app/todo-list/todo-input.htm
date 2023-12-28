@@ -12,21 +12,29 @@
   <option value="doing">doing</option>
   <option value="done">done</option>
 </select>
+<div>
+  <add-counter :init-num="initNum" :step="step"></add-counter>
+  <p x-text="step"></p>
+  <input type="number" class="input input-bordered" x-model="step" />
+</div>
 
 <script>
-  import './todo-list.store'
+  import '../counter/add-counter.htm'
+  import $todoList from './todo-list.store'
+
   export const $props = {
     title: 'todo list',
   }
-  export default () => ({
-    // $todoList,
-    userInput: '',
 
+  export default () => ({
+    userInput: '',
+    initNum: 3,
+    step: 1,
     addEvent() {
       if (!this.userInput) {
         return
       }
-      this.$store.todoList.add(this.userInput)
+      $todoList.add(this.userInput)
       this.userInput = ''
     },
   })

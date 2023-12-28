@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>alpinejs</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "https://component": "./component.js",
+          "/comp?": "/playground/bare/component.js"
+        }
+      }
+    </script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js"></script>
   </head>
   <body>
@@ -88,5 +96,9 @@
         </template>
       </div>
     </div>
+    <script type="module">
+      import 'https://component?../fs-ds.htm'
+      import '/comp?a'
+    </script>
   </body>
 </html>
