@@ -1,9 +1,10 @@
 <input
   type="text"
-  class="input input-sm input-bordered"
+  class="input input-sm input-bordered w-60"
   placeholder="input event"
   @keyup.enter="addEvent"
   x-model="userInput"
+  autofocus
 />
 <button class="btn btn-sm btn-primary mx-3" @click="addEvent">Add</button>
 <select class="select select-sm select-bordered" name="status" x-model="$store.todoList.status">
@@ -12,11 +13,6 @@
   <option value="doing">doing</option>
   <option value="done">done</option>
 </select>
-<div>
-  <add-counter :init-num="initNum" :step="step"></add-counter>
-  <p x-text="step"></p>
-  <input type="number" class="input input-bordered" x-model="step" />
-</div>
 
 <script>
   import '../counter/add-counter.htm'
@@ -28,8 +24,6 @@
 
   export default () => ({
     userInput: '',
-    initNum: 3,
-    step: 1,
     addEvent() {
       if (!this.userInput) {
         return

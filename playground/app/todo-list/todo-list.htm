@@ -8,10 +8,15 @@
           @keyup.enter="handleEditDone"
           @blur="handleEditDone"
           x-model="title"
+          x-init="$el.focus()"
         />
       </template>
       <template x-if="!editing">
-        <span x-text="item.title" class="select-text"></span>
+        <span
+          x-text="item.title"
+          class="select-text"
+          :class="item.status === 'done' ? 'line-through italic text-gray-500' : ''"
+        ></span>
       </template>
       <div class="mx-3 inline-flex gap-3 items-center">
         <span
@@ -19,12 +24,27 @@
           class="badge badge-md badge-outline badge-primary cursor-pointer"
           x-text="item.status"
         ></span>
-        <button @click="editing = !editing" class="btn btn-xs btn-square">
-          <iconify-icon icon="mdi:edit" class="text-base text-green-600"></iconify-icon>
-        </button>
-        <button @click="$todoList.delete(item.id)" class="btn btn-xs btn-square">
-          <iconify-icon icon="mdi:delete" class="text-base text-gray-600"></iconify-icon>
-        </button>
+        <template x-if="item.status !== 'done'">
+          <button @click="editing = !editing" class="btn btn-xs btn-square">
+            <iconify-icon icon="mdi:edit" class="text-base text-green-600"></iconify-icon>
+          </button>
+        </template>
+        <div class="dropdown">
+          <button tabindex="0" class="btn btn-xs btn-square">
+            <iconify-icon icon="mdi:delete" class="text-base text-gray-600"></iconify-icon>
+          </button>
+          <ul
+            tabindex="0"
+            class="dropdown-content z-[1] menu menu-xs p-2 shadow bg-base-100 rounded-box w-18"
+          >
+            <li>
+              <a @click="$todoList.delete(item.id)">
+                <iconify-icon icon="mdi:delete" class="text-xs text-gray-600"></iconify-icon>
+                delete
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </li>
   </template>
