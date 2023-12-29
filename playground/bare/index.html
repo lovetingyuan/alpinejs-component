@@ -7,98 +7,22 @@
     <script type="importmap">
       {
         "imports": {
-          "https://component": "./component.js",
-          "/comp?": "/playground/bare/component.js"
+          "alpinejs": "https://esm.sh/alpinejs@3.13.3",
+          "validate-element-name": "https://esm.sh/validate-element-name@3.0.0",
+          "https://comp": "./component.js"
         }
       }
     </script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js"></script>
   </head>
-  <body>
-    <script>
-      document.addEventListener('alpine:init', () => {
-        Alpine.data('aaa', () => {
-          return {
-            show: true,
-            activeTab: 'active tab:',
-          }
-        })
-        Alpine.data('bbb', () => {
-          return {
-            largeData: Array.from({ length: 1000000 }).map(v => {
-              return { v }
-            }),
-            tabs: [
-              { title: 'aa', key: 'aa' },
-              { title: 'bb', key: 'bb' },
-            ],
-          }
-        })
-      })
-    </script>
-    <div id="app">
-      <h1 x-data="{ message: 'I ❤️ Alpine' }" x-text="message"></h1>
-      <div x-data>
-        <template x-for="i in 12" :key="i">
-          <span>
-            <span x-text="` i: ${i},`"></span>
-            <template x-for="j in 4" :key="`${i}_${j}`">
-              <span x-text="` j: ${i}-${j},`"></span>
-            </template>
-          </span>
-        </template>
-        <style>
-          svg {
-            width: 100%;
-            height: 100%;
-          }
 
-          .clock-face {
-            stroke: #333;
-            fill: white;
-          }
-
-          .minor {
-            stroke: #999;
-            stroke-width: 0.5;
-          }
-
-          .major {
-            stroke: #333;
-            stroke-width: 1;
-          }
-        </style>
-        <div style="width: 300px; height: 300px">
-          <!-- markers -->
-          <template x-for="i in 12" :key="i">
-            <g>
-              <line class="major" y1="35" y2="45" :transform="`rotate(${30 * i * 5})`" />
-              <template x-for="j in 4" :key="`${i}_${j}`">
-                <line class="minor" y1="42" y2="45" :transform="`rotate(${6 * (i * 5 + j)})`" />
-              </template>
-            </g>
-          </template>
-        </div>
-      </div>
-      <div x-data="aaa">
-        <button @click="show = !show">click me many times, memory leaks</button>
-        <template x-if="show">
-          <div x-data="bbb">
-            <div class="my-5">
-              <template x-for="tab in tabs" :key="tab.key">
-                <p>
-                  <span x-text="activeTab"></span>
-                  <span x-text="tab.title"> </span>
-                </p>
-              </template>
-            </div>
-          </div>
-        </template>
-      </div>
-    </div>
+  <body x-data>
+    <my-app x-init="loading.remove()">
+      <h3 id="loading">Loading...</h3>
+    </my-app>
     <script type="module">
-      import 'https://component?../fs-ds.htm'
-      import '/comp?a'
+      import 'https://comp?my-app'
+      // import 'https://comp?./app-header.htm'
+      Alpine.start()
     </script>
   </body>
 </html>

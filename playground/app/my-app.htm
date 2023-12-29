@@ -1,12 +1,7 @@
 <div>
   <app-header></app-header>
   <div class="divider"></div>
-  <my-tabs
-    x-init="console.log(9, tabs, $el.getAttributeNames())"
-    :tabs="tabs"
-    :active-tab="activeTab"
-    @change-tab="setActiveTab($event.detail.id);"
-  >
+  <my-tabs :tabs="tabs" :active-tab="activeTab" @change-tab="setActiveTab($event.detail.id);">
     <template default></template>
     <template x-if="activeTab === 'counter'">
       <add-counter :init-num="666" style="background: red"></add-counter>
