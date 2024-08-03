@@ -1,0 +1,26 @@
+<div class="border border-solid p-2 rounded">
+  <span class="font-bold">Counter:</span>
+  <span x-text="count" class="text-xl mr-5"></span>
+  <p x-text="a"></p>
+  <button class="btn btn-primary btn-sm" @click="add">Increment</button>
+</div>
+
+<script>
+  function setup() {
+    console.log('add counter', this)
+    return {
+      ggg: null,
+      step: 1,
+      count: 0,
+      a: 444,
+      props(props) {
+        console.log('props change', props)
+        this.step = props.step
+      },
+
+      add() {
+        this.count += this.step
+      },
+    }
+  }
+</script>

@@ -1,0 +1,34 @@
+<div>
+  <h2 x-text="a"></h2>
+  <button @click="handleToggle">toggle <span x-text="toggle"></span></button>
+
+  <add-counter x-props="{step: countProps.init, ctx }"></add-counter>
+  <button @click="addInit">add init <span x-text="countProps.init"></span></button>
+</div>
+
+<script>
+  import './add-counter.htm'
+  function setup() {
+    return {
+      a: 'hello alpinejs',
+      foo: 234,
+      toggle: false,
+      handleToggle() {
+        this.toggle = !this.toggle
+      },
+      ctx: null,
+      init() {
+        this.ctx = this
+      },
+      countProps: {
+        init: 0,
+      },
+      addInit() {
+        this.countProps.init++
+        // this.countProps = {
+        //   init: this.countProps.init + 1,
+        // }
+      },
+    }
+  }
+</script>
