@@ -1,0 +1,72 @@
+<ol class="list-decimal pl-5">
+  <template x-for="item in $todoList.displayList" :key="item.id">
+    <li x-data="{ editing: false, title: item.title }" class="my-3 select-none">
+      <template x-if="editing">
+        <input
+          type="text"
+          class="input input-info input-bordered input-sm"
+          @keyup.enter="handleEditDone"
+          @blur="handleEditDone"
+          x-model="title"
+          x-init="$el.focus()"
+        />
+      </template>
+      <template x-if="!editing">
+        <span
+          x-text="item.title"
+          class="select-text"
+          :class="item.status === 'done' ? 'line-through italic text-gray-500' : ''"
+        ></span>
+      </template>
+      <div class="mx-3 inline-flex gap-3 items-center">
+        <span
+          @click="$todoList.changeStatus(item.id)"
+          class="badge badge-md badge-outline badge-primary cursor-pointer"
+          x-text="item.status"
+        ></span>
+        <template x-if="item.status !== 'done'">
+          <button @click="editing = !editing" class="btn btn-xs btn-square">
+            <iconify-icon icon="mdi:edit" class="text-base text-green-600"></iconify-icon>
+          </button>
+        </template>
+        <div class="dropdown dropdown-right">
+          <button tabindex="0" class="btn btn-xs btn-square">
+            <iconify-icon icon="mdi:delete" class="text-base text-gray-600"></iconify-icon>
+          </button>
+          <ul
+            tabindex="0"
+            class="dropdown-content z-[1] menu menu-xs p-2 shadow bg-base-100 rounded-box w-18"
+          >
+            <li>
+              <a @click="$todoList.delete(item.id)">
+                <iconify-icon icon="mdi:delete" class="text-xs text-gray-600"></iconify-icon>
+                delete
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </li>
+  </template>
+  <template x-if="$todoList.displayList.length === 0">
+    <p>List is empty.</p>
+  </template>
+</ol>
+
+<script>
+  import $todoList from './todo-list.store'
+
+  function setup() {
+    return {
+      $todoList,
+      handleEditDone() {
+        if (!this.title) {
+          this.title = this.item.title
+        } else {
+          this.item.title = this.title
+        }
+        this.editing = false
+      },
+    }
+  }
+</script>

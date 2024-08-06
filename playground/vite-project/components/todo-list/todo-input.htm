@@ -1,0 +1,34 @@
+<section>
+  <input
+    type="text"
+    class="input input-sm input-bordered w-60"
+    placeholder="input event"
+    @keyup.enter="addEvent"
+    x-model="userInput"
+    autofocus
+  />
+  <button class="btn btn-sm btn-primary mx-3" @click="addEvent">Add</button>
+  <select class="select select-sm select-bordered" name="status" x-model="$store.todoList.status">
+    <option value="all">all</option>
+    <option value="todo">todo</option>
+    <option value="doing">doing</option>
+    <option value="done">done</option>
+  </select>
+</section>
+
+<script>
+  import $todoList from './todo-list.store'
+
+  function setup() {
+    return {
+      userInput: '',
+      addEvent() {
+        if (!this.userInput) {
+          return
+        }
+        $todoList.add(this.userInput)
+        this.userInput = ''
+      },
+    }
+  }
+</script>

@@ -38,8 +38,9 @@ export async function compileTemplate(
   const head = html.childNodes.find((v: any) => v.tagName === 'head')
   const body = html.childNodes.find((v: any) => v.tagName === 'body')
   const childNodes = [...(head?.childNodes ?? []), ...(body?.childNodes ?? [])]
-  const fragments = []
+  const styles = []
   let script: any = null
+  let rootElement: any = null
 
   for (const node of childNodes) {
     if (node.nodeName === 'script') {
@@ -49,12 +50,25 @@ export async function compileTemplate(
         this.error(`component "${name}" contains more than one <script> tag, please keep only one.`)
       }
     } else if (!node.nodeName.startsWith('#') && node.tagName) {
-      fragments.push(node)
+      if (node.nodeName === 'style') {
+        styles.push(node)
+      } else if (rootElement === null) {
+        rootElement = node
+      } else {
+        this.error(
+          `component "${name}" contains more than one root element except <style> and <script>, please keep only one.`
+        )
+      }
     }
   }
-  let template = fragments
+  if (!rootElement) {
+    this.error(
+      `component "${name}" must contain only one root element except <style> and <script>.`
+    )
+  }
+  let template = [rootElement, ...styles]
     .map(node => {
-      if (!node.sourceCodeLocation) {
+      if (!node?.sourceCodeLocation) {
         return ''
       }
       const { startOffset, endOffset } = node.sourceCodeLocation
@@ -62,7 +76,7 @@ export async function compileTemplate(
     })
     .join('')
 
-  if (minify && template.length > 10) {
+  if (minify) {
     const { minify: minifyHtml } = require('html-minifier-terser')
     template = await minifyHtml(template, defaultMinifyOptions)
   }

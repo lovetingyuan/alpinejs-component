@@ -74,7 +74,9 @@ Alpine.directive(
     if (el.constructor.type !== 'alpine') {
       return
     }
-    const getProps = evaluateLater(expression)
+    const getProps = evaluateLater(expression, {
+      scope: {},
+    })
 
     effect(() => {
       let props
@@ -84,26 +86,13 @@ Alpine.directive(
         } else {
           props = p
         }
-        const scopes = el.shadowRoot.firstElementChild._x_dataStack
+        const scopes = el.firstElementChild._x_dataStack
         if (scopes && scopes[0] && typeof scopes[0].props === 'function') {
           scopes[0].props(props)
         }
-        // console.log('props update', el, props)
-        // if (el._props) {
-        //   Object.assign(el._props, props)
-        // } else {
-        //   el._props = props
-        // }
-        // console.log(11, el, el._props)
+        console.log(props)
       })
     })
-    // effect(() => {
-    //   el._props = evaluate(expression)
-    //   console.log(11, el._props)
-    // })
-    // console.log('props', el, el._props)
-    Alpine.initTree(el.shadowRoot)
-    console.log('init', el)
   }
 )
 

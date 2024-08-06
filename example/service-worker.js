@@ -1,5 +1,6 @@
 // 引入 Babel Standalone
 // importScripts('https://unpkg.com/@babel/standalone@7.23.4/babel.min.js')
+import { parse } from 'https://cdn.jsdelivr.net/npm/@vue/compiler-sfc@3.4.35/+esm'
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -60,78 +61,79 @@ export const {${keys}} = __$JSon
 function transformHtm(code, url) {
   const componentName = url.split('/').pop().split('.').shift()
   const scopeName = `${componentName.replace(/-/g, '_')}$`
-  const scriptRegex = /<script\b[^>]*>([\s\S]*?)<\/script>/gi
-
-  let scriptContent = ''
-  let remainingHtml = code
-
-  // 提取 script 内容并移除 script 标签
-  remainingHtml = remainingHtml.replace(scriptRegex, function (match, script) {
-    scriptContent += script + '\n'
-    return ''
-  })
-
-  // 移除可能残留的空行
-  remainingHtml = remainingHtml.replace(/^\s*[\r\n]/gm, '')
+  if (!code.includes('<script ') && !code.includes('</script>')) {
+    code = code + '<script>/**/</script>'
+  }
+  const { descriptor, errors } = parse(code)
+  if (errors.length) {
+    throw new Error(
+      `component "${componentName}" has errors: \n${errors.map(e => e.message).join('\n')}`
+    )
+  }
+  const scriptContent = descriptor.script?.content ?? ''
+  const stylesContent = descriptor.styles.map(s => s.content).join('\n')
+  if (descriptor.customBlocks.length > 1) {
+    throw new Error(`component "${componentName}" can only contain one single root element`)
+  }
+  if (!descriptor.customBlocks.length) {
+    throw new Error(`component "${componentName}" must contain one single root element`)
+  }
+  const [rootElement] = descriptor.customBlocks
   const dataScopeCode = `
-  import Alpine from 'alpinejs'
-  Alpine.data("${scopeName}", function () {
-    const scope = typeof setup === 'function' ? setup.call(this) : {}
-    return scope
-  })
+import Alpine from 'alpinejs'
+Alpine.data("${scopeName}", function () {
+  const scope = typeof setup === 'function' ? setup.call(this) : {}
+  return scope
+})
   `
   const templateCode = `
-  const __template = ${JSON.stringify(remainingHtml)}
-  const __container = document.createElement('template')
-  __container.innerHTML = __template
-  if (__container.content.childElementCount !== 1) {
-    throw new Error("${componentName} has more than one root element.")
-  }
-  __container.content.firstElementChild.setAttribute('x-data', "${scopeName}")
+const __template = document.createElement("${rootElement.type}")
+__template.setAttribute('x-data', "${scopeName}")
+Object.entries(${JSON.stringify(rootElement.attrs)}).forEach(([k, v]) => {
+  __template.setAttribute(k, v)
+})
+__template.innerHTML = ${JSON.stringify(rootElement.content)}
+
+const __style = document.createElement('style')
+__style.textContent = ${JSON.stringify(stylesContent)}
   `
   const componentCode = `
-  if (customElements.get("${componentName}")) {
-    throw new Error("${componentName} has been registered, check the file name.")
-  }
-  customElements.define(
-    "${componentName}",
-    class extends HTMLElement {
-      static observedAttributes = []
-      static componentName = "${componentName}"
-      static type = 'alpine'
-      constructor() {
-        super()
-        this.attachShadow({ mode: 'open' })
-      }
-      connectedCallback() {
-        const content = __container.content.firstElementChild.cloneNode(true)
-        this.shadowRoot.appendChild(content)
-        if (!this.shadowRoot.host.hasAttribute('x-props')) {
-          Alpine.initTree(this.shadowRoot)
-        }
-      }
-
-      disconnectedCallback() {
-        Alpine.destroyTree(this.shadowRoot)
-        if (this.shadowRoot.host) {
-          Alpine.destroyTree(this.shadowRoot.host)
-        }
-      }
-
-      adoptedCallback() {}
-
-      attributeChangedCallback() {
-        // console.log('attr change', name, val)
-      }
+if (customElements.get("${componentName}")) {
+  throw new Error('"${componentName}" has been registered, the file name should be unique.')
+}
+customElements.define(
+  "${componentName}",
+  class extends HTMLElement {
+    static observedAttributes = []
+    static componentName = "${componentName}"
+    static type = 'alpine'
+    constructor() {
+      super()
+      // this.attachShadow({ mode: 'open' })
     }
-  )
-  `
+    connectedCallback() {
+      this.appendChild(__template.cloneNode(true))
+      this.appendChild(__style.cloneNode(true))
+    }
+
+    disconnectedCallback() {
+      Alpine.destroyTree(this)
+    }
+
+    adoptedCallback() {}
+
+    attributeChangedCallback() {
+      // console.log('attr change', name, val)
+    }
+  }
+)
+`
   return `
-  ${scriptContent}
-  ${dataScopeCode}
-  ${templateCode}
-  ${componentCode}
-  `
+${scriptContent}
+${dataScopeCode}
+${templateCode}
+${componentCode}
+`.trim()
 }
 
 const fileExts = ['tsx', 'ts', 'css', 'json', 'htm']

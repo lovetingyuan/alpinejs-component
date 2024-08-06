@@ -3,23 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>react-atomic-context example</title>
-    <script>
-      // window.reactVersion = '16.8.0'
-      window.reactVersion = '18.2.0'
-    </script>
-    <script>
-      const imports = {
-        'react-atomic-context': '../src/index.ts',
-        react: `https://esm.sh/react@${reactVersion}`,
-        'react-dom': `https://esm.sh/react-dom@${reactVersion}`,
-        'react-dom/': `https://esm.sh/react-dom@${reactVersion}/`,
-        alpinejs: 'https://esm.sh/alpinejs@3.14.1',
+    <title>alpine example</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "alpinejs": "https://esm.sh/alpinejs@3.14.1"
+        }
       }
-      const script = document.createElement('script')
-      script.type = 'importmap'
-      script.textContent = JSON.stringify({ imports })
-      document.head.appendChild(script)
     </script>
   </head>
 
@@ -30,7 +20,7 @@
     <script type="module">
       window.addEventListener('load', () => {
         navigator.serviceWorker
-          .register('./service-worker.js')
+          .register('./service-worker.js', { type: 'module' })
           .then(registration => {
             if (navigator.serviceWorker.controller?.state === 'activated') {
               import('./main.js')

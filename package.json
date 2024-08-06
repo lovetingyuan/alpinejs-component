@@ -8,6 +8,7 @@
     "lint": "npx oxlint@latest",
     "build": "npm run build --workspace unplugin-alpinejs-component",
     "vite": "npm run dev --workspace vite-play",
+    "vite2": "npm run dev --workspace vite-project",
     "webpack": "npm run dev --workspace webpack-play",
     "rspack": "npm run dev --workspace rspack-play",
     "build:tsup": "npm run build --workspace tsup-play",

@@ -1,0 +1,20 @@
+<div class="p-5">
+  <h3 class="capitalize text-lg">todo list (<span x-text="count"></span>):</h3>
+  <todo-input class="my-4 block"></todo-input>
+  <div class="divider"></div>
+  <todo-list></todo-list>
+</div>
+
+<script>
+  import './todo-input.htm'
+  import './todo-list.htm'
+  import './todo-list.store'
+
+  function setup() {
+    return {
+      get count() {
+        return this.$store.todoList.list.length
+      },
+    }
+  }
+</script>
