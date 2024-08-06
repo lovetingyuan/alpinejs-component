@@ -7,5 +7,8 @@ export default defineConfig(() => {
     optimizeDeps: {
       exclude: ['alpinejs'],
     },
+    resolve: {
+      conditions: ['localDev'],
+    },
   }
 })

@@ -1,6 +1,6 @@
 {
   "name": "unplugin-alpinejs-component",
-  "version": "0.0.6",
+  "version": "0.0.10",
   "description": "Combine Alpinejs and Component.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -18,7 +18,7 @@
       "default": "./dist/index.cjs"
     },
     "./defineComponent": {
-      "development": "./src/defineComponent.ts",
+      "localDev": "./src/defineComponent.ts",
       "default": "./dist/defineComponent.js"
     },
     "./package.json": "./package.json"
