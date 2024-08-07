@@ -8,8 +8,13 @@
   function setup() {
     return {
       count: 0,
+      step: 1,
+      props(p) {
+        this.step = p.step
+      },
       add() {
-        this.count++
+        this.count += this.step
+        console.log(this)
       },
     }
   }

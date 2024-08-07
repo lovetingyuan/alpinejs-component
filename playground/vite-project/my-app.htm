@@ -1,7 +1,8 @@
 <main class="p-6 flex flex-col gap-4">
   <app-header></app-header>
   <hr />
-  <add-counter></add-counter>
+  <add-counter x-props="{step}"></add-counter>
+  <button @click="step++">add step <span x-text="step"></span></button>
   <hr />
   <temperature-converter></temperature-converter>
   <hr />
@@ -13,4 +14,10 @@
   import './components/add-counter.htm'
   import './components/temperature-converter.htm'
   import './components/todo-list/my-todo-list.htm'
+
+  function setup() {
+    return {
+      step: 1,
+    }
+  }
 </script>
